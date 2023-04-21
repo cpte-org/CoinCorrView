@@ -28,9 +28,11 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
 
-    - name: Run tests
-      run: |
-        python test.py
+    - name: Run tests with Xvfb
+      uses: cypress-io/github-action@v2
+      with:
+        start: Xvfb
+        command: python test.py
 
     - name: Build Executable
       run: |
