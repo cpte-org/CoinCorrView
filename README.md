@@ -1,11 +1,14 @@
 # CoinCorrView: Cryptocurrency Correlation Visualization Tool
 
-CoinCorrView is a user-friendly tool for visualizing the price correlation between different cryptocurrencies. By entering the desired date range and cryptocurrencies, users can observe how the prices of multiple cryptocurrencies have moved in relation to each other. This tool leverages the [CoinGecko API](https://www.coingecko.com/api/documentation) to fetch historical price data for the selected cryptocurrencies.
+CoinCorrView is a user-friendly tool for visualizing the price correlation between different cryptocurrencies. By entering the desired date range and cryptocurrencies, users can observe how the prices of multiple cryptocurrencies have moved in relation to each other. With CoinCorrView, you can easily visualize multiple charts at the same time to compare the price correlation between different sets of cryptocurrencies. This tool leverages the [CoinGecko API](https://www.coingecko.com/api/documentation) to fetch historical price data for the selected cryptocurrencies.
+
+![CoinCorrView Showcase Image](Docs/CoinCorrView.png)
 
 ## Features
 
 - User-friendly interface for entering date range and cryptocurrencies.
 - Visualize price correlations between multiple cryptocurrencies.
+- Ability to display multiple charts at the same time to compare different sets of cryptocurrencies.
 - Powered by the CoinGecko API for reliable and accurate data.
 
 ## Dependencies
