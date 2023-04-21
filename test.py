@@ -1,15 +1,17 @@
 import unittest
-from tkinter import Toplevel
+from tkinter import Tk
 from main import CryptoCompare
 import warnings
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
+
 class TestCryptoCompare(unittest.TestCase):
 
     def setUp(self):
-        self.root = Toplevel()
+        self.root = Tk()
         self.crypto_compare = CryptoCompare(self.root)
+        self.root.after(10000, self.root.destroy)  # Close the window after 10 seconds
 
     def test_fetch_data(self):
         self.crypto_compare.start_unix = '1640995200'
