@@ -6,6 +6,7 @@ import matplotlib.cm as cm
 import tkinter as tk
 from tkinter import ttk
 import numpy as np
+import pytz
 
 
 class CryptoCompare:
@@ -56,8 +57,16 @@ class CryptoCompare:
         self.plot_data()
 
     def convert_dates_to_unix(self, start_date, end_date):
-        start_unix = datetime.datetime.strptime(start_date, '%d-%m-%Y').strftime('%s')
-        end_unix = datetime.datetime.strptime(end_date, '%d-%m-%Y').strftime('%s')
+        start_datetime = datetime.datetime.strptime(start_date, '%d-%m-%Y')
+        end_datetime = datetime.datetime.strptime(end_date, '%d-%m-%Y')
+        end_datetime = end_datetime + datetime.timedelta(hours=23, minutes=59, seconds=59)
+        
+        start_datetime_utc = start_datetime.replace(tzinfo=pytz.UTC)
+        end_datetime_utc = end_datetime.replace(tzinfo=pytz.UTC)
+        
+        start_unix = int(start_datetime_utc.timestamp())
+        end_unix = int(end_datetime_utc.timestamp())
+        
         return start_unix, end_unix
 
     def fetch_data(self):
