@@ -28,11 +28,16 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
 
-    - name: Run tests with Xvfb
-      uses: cypress-io/github-action@v2
-      with:
-        start: Xvfb
-        command: python test.py
+    - name: Set up Xvfb
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get install -y xvfb
+        echo "DISPLAY=:99.0" >> $GITHUB_ENV
+        Xvfb :99 -screen 0 1024x768x24 &
+
+    - name: Run tests
+      run: |
+        pytest test.py
 
     - name: Build Executable
       run: |
