@@ -1,15 +1,14 @@
 import unittest
-from tkinter import Tk
+from tkinter import Toplevel
 from main import CryptoCompare
 import warnings
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
-
 class TestCryptoCompare(unittest.TestCase):
 
     def setUp(self):
-        self.root = Tk()
+        self.root = Toplevel()
         self.crypto_compare = CryptoCompare(self.root)
 
     def test_fetch_data(self):
