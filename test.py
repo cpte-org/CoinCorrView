@@ -11,7 +11,6 @@ class TestCryptoCompare(unittest.TestCase):
     def setUp(self):
         self.root = Tk()
         self.crypto_compare = CryptoCompare(self.root)
-        self.root.after(10000, self.root.destroy)  # Close the window after 10 seconds
 
     def test_fetch_data(self):
         self.crypto_compare.start_unix = '1640995200'
