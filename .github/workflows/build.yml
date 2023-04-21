@@ -36,10 +36,12 @@ jobs:
         Xvfb :99 -screen 0 1024x768x24 &
 
     - name: Run tests
+      timeout-minutes: 1
       run: |
         pytest test.py
 
     - name: Build Executable
+      if: success() || failure()
       run: |
         pyinstaller --onefile --name CoinCorrView main.py
         if [ "${{ matrix.os }}" == "windows-latest" ]; then
@@ -49,6 +51,7 @@ jobs:
         fi
 
     - name: Upload Executable as Artifact
+      if: success() || failure()
       uses: actions/upload-artifact@v2
       with:
         name: CoinCorrView-${{ matrix.os }}
