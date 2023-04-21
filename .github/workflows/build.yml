@@ -44,7 +44,7 @@ jobs:
       if: success() || failure()
       run: |
         pyinstaller --onefile --name CoinCorrView main.py
-        if [ "${{ matrix.os }}" == "windows-latest" ]; then
+        if ([ "${{ matrix.os }}" == "windows-latest" ]); then
           mv dist/CoinCorrView.exe dist/CoinCorrView-windows.exe
         else
           mv dist/CoinCorrView dist/CoinCorrView-linux
