@@ -28,7 +28,8 @@ CoinCorrView is a user-friendly tool for visualizing the price correlation betwe
 
 2. Install the required dependencies:
 
-`pip install -r requirements.txt`
+`pip install -r requirements.txt`. Note: if you are using a Linux distribution, you can install the tkinter module using the package manager:
+`sudo apt-get install python3-tk`
 
 3. Run the `main.py` script:
 
