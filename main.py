@@ -8,7 +8,6 @@ from tkinter import ttk
 import numpy as np
 import pytz
 
-
 class CryptoCompare:
     def __init__(self, master):
         self.master = master
@@ -20,11 +19,11 @@ class CryptoCompare:
 
         self.create_widgets()
 
-        #set default values
-        self.start_date_entry.insert(0, "01-01-2022")
-        self.end_date_entry.insert(0, "19-04-2023")
+        # Set default values
+        current_year = datetime.datetime.now().year
+        self.start_date_entry.insert(0, f"01-01-{current_year}")
+        self.end_date_entry.insert(0, datetime.datetime.now().strftime("%d-%m-%Y"))
         self.coins_entry.insert(0, "zcash,ethereum,bitcoin")
-
 
     def create_widgets(self):
         self.start_date_label = ttk.Label(self.master, text="Start Date (dd-mm-yyyy):")
@@ -73,16 +72,21 @@ class CryptoCompare:
         self.coin_dfs = []
         for coin_id in self.coin_ids:
             response = requests.get(self.endpoint_url.format(coin_id, self.start_unix, self.end_unix))
-            coin_df = pd.DataFrame(response.json()['prices'], columns=['timestamp', 'price'])
-            coin_df['timestamp'] = pd.to_datetime(coin_df['timestamp'], unit='ms')
-            coin_df.set_index('timestamp', inplace=True)
-            coin_df = coin_df.resample('D').last()
-            coin_df.dropna(inplace=True)
-            self.coin_dfs.append(coin_df)
-
-
+            if response.status_code == 200:
+                coin_df = pd.DataFrame(response.json()['prices'], columns=['timestamp', 'price'])
+                coin_df['timestamp'] = pd.to_datetime(coin_df['timestamp'], unit='ms')
+                coin_df.set_index('timestamp', inplace=True)
+                coin_df = coin_df.resample('D').last()
+                coin_df.dropna(inplace=True)
+                self.coin_dfs.append(coin_df)
+            else:
+                print(f"Error fetching data for {coin_id}: {response.status_code} - {response.text}")
 
     def plot_data(self):
+        if not self.coin_dfs:
+            print("No data to plot. Please check your input and try again.")
+            return
+
         fig, ax1 = plt.subplots(figsize=(12, 6))
         ax_list = [ax1]
         for i in range(1, len(self.coin_ids)):
@@ -97,7 +101,7 @@ class CryptoCompare:
 
         for i, (coin_id, ax, color) in enumerate(zip(self.coin_ids, ax_list, colors)):
             ax.plot(self.coin_dfs[i].index, self.coin_dfs[i]['price'], label=coin_id.capitalize(), color=color)
-            ax.set_ylabel(coin_id.capitalize() + ' Price', color=color)
+            ax.set_ylabel(f"{coin_id.capitalize()} Price", color=color)
             ax.yaxis.label.set_color(color)
             ax.tick_params(axis='y', colors=color)
             if i > 0:
@@ -106,13 +110,10 @@ class CryptoCompare:
             ax.tick_params(axis='x', pad=10)
 
         ax_list[-1].legend([ax.get_lines()[0] for ax in ax_list], self.coin_ids)
-        ax_list[0].set_ylabel(self.coin_ids[0].capitalize() + ' Price', color=colors[0])
+        ax_list[0].set_ylabel(f"{self.coin_ids[0].capitalize()} Price", color=colors[0])
         plt.xlabel("Date")
         plt.title("Cryptocurrency Price Comparison")
         plt.show()
-
-
-
 
 if __name__ == '__main__':
     root = tk.Tk()
